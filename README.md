@@ -7,7 +7,8 @@ Inspired by [Twinkle Creative](https://dribbble.com/shots/16383765-Finance-Mobil
 ## ScreenShots
 
 ![Screenshot_20221019_115840](https://user-images.githubusercontent.com/22987790/196613812-b4d5f0fb-205f-4a25-b033-ae52d11d77a9.png)
-![Screenshot_20221019_115606](https://user-images.githubusercontent.com/22987790/196613441-15518c01-8738-463c-aa32-201cf09ca595.png)
+![Screenshot_20221019_120408](https://user-images.githubusercontent.com/22987790/196614609-8f2fb834-8acd-4d5e-8201-d2d466cdca41.png)
+
 
 
 ## Getting Started
