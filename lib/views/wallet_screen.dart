@@ -19,7 +19,7 @@ class _WalletScreenState extends State<WalletScreen> {
     final size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Styles.greyColor,
+        backgroundColor: Styles.greenColor,
         appBar: AppBar(
           backgroundColor: Styles.accentColor,
           toolbarHeight: 50,
