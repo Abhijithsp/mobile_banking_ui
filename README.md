@@ -1,6 +1,14 @@
 # banking_ui
 
-A new Flutter project.
+A new Flutter project contains design of Mobile Banking UI
+
+Inspired by [Twinkle Creative](https://dribbble.com/shots/16383765-Finance-Mobile-Banking-App).
+
+## ScreenShots
+
+![Screenshot_20221019_115840](https://user-images.githubusercontent.com/22987790/196613812-b4d5f0fb-205f-4a25-b033-ae52d11d77a9.png)
+![Screenshot_20221019_115606](https://user-images.githubusercontent.com/22987790/196613441-15518c01-8738-463c-aa32-201cf09ca595.png)
+
 
 ## Getting Started
 
