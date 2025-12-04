@@ -5,25 +5,28 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-import 'package:banking_ui/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'package:banking_ui/main.dart';
+
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  testWidgets('Splash screen navigates to dashboard', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const MyApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // Verify that the splash screen shows the app name.
+    expect(find.text('BANKING'), findsOneWidget);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
+    // Pump the widget for 4 seconds to allow the timer to complete.
+    await tester.pump(const Duration(seconds: 4));
+    // Pump again to handle the navigation frame.
     await tester.pump();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Verify that the splash screen is gone.
+    expect(find.text('BANKING'), findsNothing);
+
+    // Verify that the dashboard screen is shown.
+    expect(find.text('Hi ABHIJITH \nLets Explore!'), findsOneWidget);
   });
 }

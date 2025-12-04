@@ -19,10 +19,10 @@ class _SplashScreenState extends State<SplashScreen> {
     startTime();
   }
 
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    body: Container(
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
         color: Styles.greenColor,
         child: const Center(
           child: Text(
@@ -33,19 +33,19 @@ Widget build(BuildContext context) {
                 color: Colors.white),
           ),
         ),
-    ),
-  );
-}
+      ),
+    );
+  }
 
-startTime() async {
-  var duration = const Duration(seconds: 4);
-  return Timer(duration, navigationPage);
-}
+  startTime() async {
+    var duration = const Duration(seconds: 4);
+    return Timer(duration, () => navigationPage(context));
+  }
 
-void navigationPage() {
-  Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => const BottomNavigationScreen()),
-  );
-}
+  void navigationPage(BuildContext context) {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const BottomNavigationScreen()),
+    );
+  }
 }
