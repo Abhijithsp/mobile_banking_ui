@@ -6,14 +6,15 @@ import 'package:banking_ui/views/wallet_screen.dart';
 import 'package:flutter/material.dart';
 
 class BottomNavigationScreen extends StatefulWidget {
-  const BottomNavigationScreen({Key? key}) : super(key: key);
+  const BottomNavigationScreen({super.key});
 
   @override
   State<BottomNavigationScreen> createState() => _BottomNavigationScreenState();
 }
 
 class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
-  int selectedIndex=0;
+  int selectedIndex = 0;
+  
   static final List<Widget> _widgetOptions = <Widget>[
     const DashboardScreen(),
     const WalletScreen(),
@@ -26,40 +27,39 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
       selectedIndex = index;
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: _widgetOptions.elementAt(selectedIndex),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
+      body: _widgetOptions.elementAt(selectedIndex),
+      bottomNavigationBar: NavigationBar(
         backgroundColor: Styles.whiteColor,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        selectedLabelStyle: TextStyle(fontSize: 20, color: Styles.primaryColor),
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: Styles.accentColor,
-        unselectedItemColor: Colors.grey.withOpacity(0.7),
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_rounded,size: 30,),
+        elevation: 8,
+        selectedIndex: selectedIndex,
+        onDestinationSelected: _onItemTapped,
+        indicatorColor: Styles.yellowColor,
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.home_outlined),
+            selectedIcon: Icon(Icons.home_rounded),
             label: 'Home',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_balance_wallet,size: 30),
+          NavigationDestination(
+            icon: Icon(Icons.account_balance_wallet_outlined),
+            selectedIcon: Icon(Icons.account_balance_wallet_rounded),
             label: 'Wallet',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.leaderboard,size: 30),
-            label: 'Summery',
+          NavigationDestination(
+            icon: Icon(Icons.bar_chart_outlined),
+            selectedIcon: Icon(Icons.bar_chart_rounded),
+            label: 'Summary',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle_sharp,size: 30),
+          NavigationDestination(
+            icon: Icon(Icons.person_outline_rounded),
+            selectedIcon: Icon(Icons.person_rounded),
             label: 'Profile',
           ),
         ],
-        currentIndex: selectedIndex,
-        onTap: _onItemTapped,
       ),
     );
   }

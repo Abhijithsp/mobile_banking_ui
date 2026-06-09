@@ -1,12 +1,16 @@
-import 'package:banking_ui/utils/constants/assets.dart';
 import 'package:banking_ui/utils/constants/color_styles.dart';
 import 'package:banking_ui/utils/constants/json/shortcut_list.dart';
 import 'package:banking_ui/utils/constants/json/transactions.dart';
+import 'package:banking_ui/widgets/bank_card.dart';
+import 'package:banking_ui/widgets/shortcut_button.dart';
+import 'package:banking_ui/widgets/transaction_tile.dart';
+import 'package:banking_ui/utils/constants/assets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class DashboardScreen extends StatefulWidget {
-  const DashboardScreen({Key? key}) : super(key: key);
+  const DashboardScreen({super.key});
 
   @override
   State<DashboardScreen> createState() => _DashboardScreenState();
@@ -15,235 +19,202 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Styles.greenColor,
-      body: CustomScrollView(slivers: <Widget>[
-        SliverAppBar(
-          automaticallyImplyLeading: false,
-          expandedHeight: 260.0,
-          backgroundColor: Styles.greenColor,
-          pinned: false,
-          floating: true,
-          snap: true,
-          flexibleSpace: FlexibleSpaceBar(
-            background: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
-              child: Column(
+      backgroundColor: const Color(0xFFF8FAFC),
+      body: CustomScrollView(
+        slivers: <Widget>[
+          // Header / App Bar section
+          SliverAppBar(
+            automaticallyImplyLeading: false,
+            expandedHeight: 330.0,
+            backgroundColor: Styles.greenColor,
+            pinned: true,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Styles.greenColor, const Color(0xFF012C33)],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 50, 16, 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // User greeting and notifications
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Welcome back,',
+                                style: GoogleFonts.outfit(
+                                  fontSize: 14,
+                                  color: Colors.white.withValues(alpha: 0.6),
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                'Abhijith S P',
+                                style: GoogleFonts.outfit(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                  color: Styles.whiteColor,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.1),
+                              shape: BoxShape.circle,
+                            ),
+                            child: IconButton(
+                              icon: const Icon(
+                                Icons.notifications_none_rounded,
+                                size: 26,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {},
+                            ),
+                          ),
+                        ],
+                      ),
+                      // Card preview
+                      BankCard(
+                        balance: '₹ 2,50,000.00',
+                        cardNumber: '3829 4820 4629 5025',
+                        expiryDate: '05/22',
+                        cardAsset: Assets.cardsVisaYellow,
+                        leftBgColor: Styles.accentColor,
+                        rightBgColor: Styles.yellowColor,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+
+          // Shortcut Actions floating strip
+          SliverPersistentHeader(
+            pinned: true,
+            delegate: PersistentHeader(
+              widget: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Container(
+                  height: 90,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: Styles.whiteColor,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.05),
+                        blurRadius: 15,
+                        offset: const Offset(0, 5),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: shortcutList.map<Widget>((item) {
+                      return ShortcutButton(
+                        icon: item['icon'],
+                        label: item['label'],
+                        color: item['color'],
+                        onTap: () {
+                          if (item['route'] != null) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (c) => item['route']),
+                            );
+                          }
+                        },
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ),
+            ),
+          ),
+
+          // Transactions Header
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
+            sliver: SliverToBoxAdapter(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 22),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Hi ABHIJITH \nLets Explore!',
-                          style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Styles.whiteColor),
-                        ),
-                        Icon(
-                          Icons.notifications_outlined,
-                          size: 28,
-                          color: Styles.whiteColor,
-                        ),
-                      ],
+                  Text(
+                    'Recent Transactions',
+                    style: GoogleFonts.outfit(
+                      color: Styles.primaryColor,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Container(
-                        width: size.width * 0.67,
-                        padding: const EdgeInsets.fromLTRB(16, 10, 0, 20),
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.horizontal(
-                              left: Radius.circular(15)),
-                          color: Styles.accentColor,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Image.asset(Assets.cardsVisaYellow,
-                                width: 60, height: 50, fit: BoxFit.cover),
-                            Text('\₹ 250000.00',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 32,
-                                    color: Styles.whiteColor)),
-                            Text('CARD NUMBER',
-                                style: TextStyle(
-                                    color: Styles.whiteColor.withOpacity(0.5),
-                                    fontSize: 12)),
-                            Text('3829 4820 4629 5025',
-                                style: TextStyle(
-                                    color: Styles.whiteColor,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold)),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        width: size.width * 0.27,
-                        padding: const EdgeInsets.fromLTRB(20, 10, 0, 20),
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.horizontal(
-                              right: Radius.circular(15)),
-                          color: Styles.yellowColor,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(10),
-                              margin: const EdgeInsets.only(top: 10),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Styles.greenColor,
-                              ),
-                              child: Icon(
-                                Icons.swipe_rounded,
-                                color: Styles.whiteColor,
-                                size: 20,
-                              ),
+                  InkWell(
+                    onTap: () {},
+                    borderRadius: BorderRadius.circular(8),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            'Today',
+                            style: GoogleFonts.outfit(
+                              color: Styles.greenColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
                             ),
-                            const Spacer(),
-                            const Text('VALID',
-                                style: TextStyle(fontSize: 12)),
-                            const Text('05/22',
-                                style: TextStyle(fontSize: 15)),
-                          ],
-                        ),
-                      )
-                    ],
+                          ),
+                          const SizedBox(width: 4),
+                          Icon(
+                            CupertinoIcons.chevron_down,
+                            color: Styles.greenColor,
+                            size: 14,
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ],
               ),
             ),
           ),
-        ),
-        SliverPersistentHeader(
-          pinned: true,
-          delegate: PersistentHeader(
-            widget: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 5),
-              child: Container(
-                height: 60,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 22, vertical: 5),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: Styles.whiteColor,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: shortcutList.map<Widget>((item) {
-                    return InkWell(
-                      onTap: () => item['route'] == null
-                          ? null
-                          : Navigator.push(context,
-                              MaterialPageRoute(builder: (c) => item['route'])),
-                      child: Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: item['color'].withOpacity(0.5),
-                        ),
-                        child: Icon(item['icon'], color: item['color']),
-                      ),
-                    );
-                  }).toList(),
-                ),
+
+          // Transactions List
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            sliver: SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  final trs = transactions[index];
+                  return TransactionTile(
+                    name: trs['name'],
+                    date: trs['date'],
+                    amount: trs['amount'],
+                    avatar: trs['avatar'],
+                    icon: trs['icon'],
+                  );
+                },
+                childCount: transactions.length,
               ),
             ),
           ),
-        ),
-        SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (BuildContext context, int index) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Transactions',
-                        style: TextStyle(
-                            color: Styles.accentColor,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold)),
-                    Row(
-                      children: [
-                        Text('Today',
-                            style: TextStyle(
-                                color: Styles.accentColor, fontSize: 16)),
-                        Icon(CupertinoIcons.chevron_down,
-                            color: Styles.accentColor, size: 17)
-                      ],
-                    )
-                  ],
-                ),
-              );
-            },
-            childCount: 1,
+          
+          // Spacer at the bottom
+          const SliverToBoxAdapter(
+            child: SizedBox(height: 24),
           ),
-        ),
-        SliverList(
-          delegate: SliverChildBuilderDelegate(
-            (BuildContext context, int index) {
-              final trs = transactions[index];
-              return ListTile(
-                isThreeLine: true,
-                minLeadingWidth: 20,
-                minVerticalPadding: 20,
-                contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-                leading: Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: Container(
-                      width: 50,
-                      height: 50,
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Styles.accentColor,
-                        boxShadow: [
-                          BoxShadow(
-                            offset: const Offset(0, 1),
-                            color: Colors.white.withOpacity(0.1),
-                            blurRadius: 2,
-                            spreadRadius: 1,
-                          )
-                        ],
-                        image: index == 0
-                            ? null
-                            : DecorationImage(
-                                image: AssetImage(trs['avatar']),
-                                fit: BoxFit.cover,
-                              ),
-                        shape: BoxShape.circle,
-                      ),
-                      child: index == 0
-                          ? Icon(trs['icon'],
-                              color: const Color(0xFFFF736C), size: 20)
-                          : const SizedBox()),
-                ),
-                title: Text(trs['name'],
-                    style: TextStyle(
-                        color: Styles.accentColor,
-                        fontWeight: FontWeight.w500)),
-                subtitle: Text(trs['date'],
-                    style: TextStyle(color: Styles.accentColor)),
-                trailing: Text(trs['amount'],
-                    style:
-                        const TextStyle(fontSize: 17, color: Colors.white)),
-              );
-            },
-            childCount: transactions.length,
-          ),
-        ),
-      ]),
+        ],
+      ),
     );
   }
 }
@@ -254,21 +225,20 @@ class PersistentHeader extends SliverPersistentHeaderDelegate {
   PersistentHeader({required this.widget});
 
   @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
       width: double.infinity,
-      height: 150.0,
-      color: Styles.greenColor,
+      height: 110.0,
+      color: const Color(0xFFF8FAFC),
       child: Center(child: widget),
     );
   }
 
   @override
-  double get maxExtent => 90.0;
+  double get maxExtent => 110.0;
 
   @override
-  double get minExtent => 90.0;
+  double get minExtent => 110.0;
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
