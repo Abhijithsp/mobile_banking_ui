@@ -106,9 +106,7 @@ class StorageService {
         name: 'ABHIJITH',
         date: '4:56 PM',
         amount: '-140',
-        iconCodePoint: CupertinoIcons.house_fill.codePoint,
-        iconFontFamily: CupertinoIcons.house_fill.fontFamily,
-        iconFontPackage: CupertinoIcons.house_fill.fontPackage,
+        iconName: 'home',
       ),
       TransactionModel(
         id: 'tx_2',

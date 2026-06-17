@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/cupertino.dart';
 
 class TransactionModel {
   final String id;
@@ -7,9 +7,7 @@ class TransactionModel {
   final String date;
   final String amount; // e.g. "-140" or "+100"
   final String? avatar;
-  final int? iconCodePoint;
-  final String? iconFontFamily;
-  final String? iconFontPackage;
+  final String? iconName;
 
   TransactionModel({
     required this.id,
@@ -17,15 +15,17 @@ class TransactionModel {
     required this.date,
     required this.amount,
     this.avatar,
-    this.iconCodePoint,
-    this.iconFontFamily,
-    this.iconFontPackage,
+    this.iconName,
   });
 
   IconData? get icon {
-    if (iconCodePoint == null) return null;
-    // ignore: non_const_argument_for_const_parameter
-    return IconData(iconCodePoint!, fontFamily: iconFontFamily, fontPackage: iconFontPackage);
+    if (iconName == 'home') {
+      return CupertinoIcons.house_fill;
+    }
+    if (iconName == 'deposit') {
+      return CupertinoIcons.arrow_down_square_fill;
+    }
+    return null;
   }
 
   Map<String, dynamic> toMap() {
@@ -35,9 +35,7 @@ class TransactionModel {
       'date': date,
       'amount': amount,
       'avatar': avatar,
-      'iconCodePoint': iconCodePoint,
-      'iconFontFamily': iconFontFamily,
-      'iconFontPackage': iconFontPackage,
+      'iconName': iconName,
     };
   }
 
@@ -48,9 +46,7 @@ class TransactionModel {
       date: map['date'] ?? '',
       amount: map['amount'] ?? '',
       avatar: map['avatar'],
-      iconCodePoint: map['iconCodePoint'],
-      iconFontFamily: map['iconFontFamily'],
-      iconFontPackage: map['iconFontPackage'],
+      iconName: map['iconName'],
     );
   }
 

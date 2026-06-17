@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace "com.example.banking_ui"
-    compileSdkVersion 35
+    compileSdkVersion 36
     ndkVersion "28.2.13676358"
 
     compileOptions {

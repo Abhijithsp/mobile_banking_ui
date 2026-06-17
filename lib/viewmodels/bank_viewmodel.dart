@@ -126,9 +126,7 @@ class BankViewModel extends ChangeNotifier {
       name: 'DEPOSIT',
       date: timeStr,
       amount: '+$amount',
-      iconCodePoint: 58837, // CupertinoIcons.arrow_down_square_fill
-      iconFontFamily: 'CupertinoIcons',
-      iconFontPackage: 'cupertino_icons',
+      iconName: 'deposit',
     );
 
     _transactions.insert(0, newTx);
