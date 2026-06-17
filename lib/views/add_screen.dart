@@ -86,20 +86,11 @@ class _AddCardScreenState extends State<AddCardScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new_rounded, color: Styles.primaryColor),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Text(
-          "Add Card",
-          style: GoogleFonts.outfit(
-            color: Styles.primaryColor,
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
-        ),
+        title: const Text("Add Card"),
       ),
       body: Form(
         key: _formKey,

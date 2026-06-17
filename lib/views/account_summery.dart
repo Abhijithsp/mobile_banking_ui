@@ -15,16 +15,7 @@ class _AccountSummeryScreenState extends State<AccountSummeryScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Text(
-          "Insights",
-          style: GoogleFonts.outfit(
-            color: Styles.primaryColor,
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
-          ),
-        ),
+        title: const Text("Insights"),
       ),
       body: ListView(
         padding: const EdgeInsets.all(16.0),

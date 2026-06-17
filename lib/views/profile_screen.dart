@@ -18,8 +18,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
+        title: const Text("Profile"),
         actions: [
           IconButton(
             icon: Icon(Icons.edit_rounded, color: Styles.primaryColor),

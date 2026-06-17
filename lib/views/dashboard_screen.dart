@@ -7,6 +7,7 @@ import 'package:banking_ui/widgets/transaction_tile.dart';
 import 'package:banking_ui/utils/constants/assets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -29,6 +30,38 @@ class _DashboardScreenState extends State<DashboardScreen> {
             expandedHeight: 330.0,
             backgroundColor: Styles.greenColor,
             pinned: true,
+            titleSpacing: 16.0,
+            systemOverlayStyle: const SystemUiOverlayStyle(
+              statusBarColor: Colors.transparent,
+              statusBarIconBrightness: Brightness.light,
+              statusBarBrightness: Brightness.dark,
+            ),
+            title: Text(
+              "APEX BANK",
+              style: GoogleFonts.outfit(
+                color: Styles.whiteColor,
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                letterSpacing: 2.0,
+              ),
+            ),
+            actions: [
+              Container(
+                margin: const EdgeInsets.only(right: 16),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.notifications_none_rounded,
+                    size: 26,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {},
+                ),
+              ),
+            ],
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
                 decoration: BoxDecoration(
@@ -39,49 +72,30 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 50, 16, 16),
+                  padding: const EdgeInsets.fromLTRB(16, 95, 16, 12),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // User greeting and notifications
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      // User greeting
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Welcome back,',
-                                style: GoogleFonts.outfit(
-                                  fontSize: 14,
-                                  color: Colors.white.withValues(alpha: 0.6),
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                              const SizedBox(height: 2),
-                              Text(
-                                'Abhijith S P',
-                                style: GoogleFonts.outfit(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.bold,
-                                  color: Styles.whiteColor,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: 0.1),
-                              shape: BoxShape.circle,
+                          Text(
+                            'Welcome back,',
+                            style: GoogleFonts.outfit(
+                              fontSize: 14,
+                              color: Colors.white.withValues(alpha: 0.6),
+                              fontWeight: FontWeight.w400,
                             ),
-                            child: IconButton(
-                              icon: const Icon(
-                                Icons.notifications_none_rounded,
-                                size: 26,
-                                color: Colors.white,
-                              ),
-                              onPressed: () {},
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            'Abhijith S P',
+                            style: GoogleFonts.outfit(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: Styles.whiteColor,
                             ),
                           ),
                         ],

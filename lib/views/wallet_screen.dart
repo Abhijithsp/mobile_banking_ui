@@ -20,17 +20,7 @@ class _WalletScreenState extends State<WalletScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: false,
-        title: Text(
-          "My Wallet",
-          style: GoogleFonts.outfit(
-            color: Styles.primaryColor,
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
-          ),
-        ),
+        title: const Text("My Wallet"),
         actions: [
           IconButton(
             icon: Icon(Icons.more_vert_rounded, color: Styles.primaryColor),
