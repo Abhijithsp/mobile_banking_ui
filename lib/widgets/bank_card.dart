@@ -12,6 +12,7 @@ class BankCard extends StatelessWidget {
   final Color textColor;
   final Color accentTextColor;
   final VoidCallback? onTap;
+  final EdgeInsetsGeometry margin;
 
   const BankCard({
     super.key,
@@ -24,6 +25,7 @@ class BankCard extends StatelessWidget {
     this.textColor = Colors.white,
     this.accentTextColor = const Color(0xFF161D28),
     this.onTap,
+    this.margin = const EdgeInsets.symmetric(vertical: 10),
   });
 
   @override
@@ -36,7 +38,7 @@ class BankCard extends StatelessWidget {
     }
 
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
+      margin: margin,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
         boxShadow: [

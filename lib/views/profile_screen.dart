@@ -2,6 +2,7 @@ import 'package:banking_ui/utils/constants/assets.dart';
 import 'package:banking_ui/utils/constants/color_styles.dart';
 import 'package:banking_ui/utils/constants/json/shortcut_list.dart';
 import 'package:banking_ui/widgets/shortcut_button.dart';
+import 'package:banking_ui/widgets/staggered_fade_slide.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -30,127 +31,153 @@ class _ProfileScreenState extends State<ProfileScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
         children: [
           // Avatar & User Info
-          Center(
-            child: Column(
-              children: [
-                Container(
-                  width: 100,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Styles.greenColor, width: 3),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.1),
-                        blurRadius: 15,
-                        offset: const Offset(0, 8),
+          StaggeredFadeSlide(
+            delayMs: 100,
+            child: Center(
+              child: Column(
+                children: [
+                  Container(
+                    width: 100,
+                    height: 100,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Styles.greenColor, width: 3),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.1),
+                          blurRadius: 15,
+                          offset: const Offset(0, 8),
+                        ),
+                      ],
+                    ),
+                    child: ClipOval(
+                      child: Image.asset(
+                        Assets.dash,
+                        fit: BoxFit.cover,
                       ),
-                    ],
-                  ),
-                  child: ClipOval(
-                    child: Image.asset(
-                      Assets.dash,
-                      fit: BoxFit.cover,
                     ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  "Abhijith S P",
-                  style: GoogleFonts.outfit(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Styles.primaryColor,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  "abhijith@apexbank.com",
-                  style: GoogleFonts.outfit(
-                    fontSize: 14,
-                    color: Colors.grey.shade500,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: Styles.greenColor.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: Text(
-                    "PREMIUM MEMBER",
+                  const SizedBox(height: 16),
+                  Text(
+                    "Abhijith S P",
                     style: GoogleFonts.outfit(
-                      color: Styles.greenColor,
-                      fontSize: 11,
+                      fontSize: 22,
                       fontWeight: FontWeight.bold,
-                      letterSpacing: 1.0,
+                      color: Styles.primaryColor,
                     ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 4),
+                  Text(
+                    "abhijith@apexbank.com",
+                    style: GoogleFonts.outfit(
+                      fontSize: 14,
+                      color: Colors.grey.shade500,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: Styles.greenColor.withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Text(
+                      "PREMIUM MEMBER",
+                      style: GoogleFonts.outfit(
+                        color: Styles.greenColor,
+                        fontSize: 11,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.0,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 28),
 
           // Shortcut button bar
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Styles.whiteColor,
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.03),
-                  blurRadius: 10,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: profilesShortcutList.map<Widget>((item) {
-                return ShortcutButton(
-                  icon: item['icon'],
-                  label: item['label'],
-                  color: item['color'],
-                  onTap: () {},
-                );
-              }).toList(),
+          StaggeredFadeSlide(
+            delayMs: 200,
+            child: Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Styles.whiteColor,
+                borderRadius: BorderRadius.circular(20),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.03),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: profilesShortcutList.map<Widget>((item) {
+                  return ShortcutButton(
+                    icon: item['icon'],
+                    label: item['label'],
+                    color: item['color'],
+                    onTap: () {},
+                  );
+                }).toList(),
+              ),
             ),
           ),
           const SizedBox(height: 28),
 
           // Settings Options
-          Text(
-            "Account Settings",
-            style: GoogleFonts.outfit(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Styles.primaryColor,
+          StaggeredFadeSlide(
+            delayMs: 300,
+            child: Text(
+              "Account Settings",
+              style: GoogleFonts.outfit(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Styles.primaryColor,
+              ),
             ),
           ),
           const SizedBox(height: 12),
-          _buildSettingsTile(
-            icon: Icons.shield_outlined,
-            title: "Security & Biometrics",
-            subtitle: "Face ID, PINs & Security settings",
+          
+          StaggeredFadeSlide(
+            delayMs: 400,
+            slideOffset: 15.0,
+            child: _buildSettingsTile(
+              icon: Icons.shield_outlined,
+              title: "Security & Biometrics",
+              subtitle: "Face ID, PINs & Security settings",
+            ),
           ),
-          _buildSettingsTile(
-            icon: Icons.notifications_none_outlined,
-            title: "Notifications",
-            subtitle: "Manage transactional alerts",
+          StaggeredFadeSlide(
+            delayMs: 500,
+            slideOffset: 15.0,
+            child: _buildSettingsTile(
+              icon: Icons.notifications_none_outlined,
+              title: "Notifications",
+              subtitle: "Manage transactional alerts",
+            ),
           ),
-          _buildSettingsTile(
-            icon: Icons.help_outline_rounded,
-            title: "Help & Support",
-            subtitle: "FAQs, Chat support & Contact info",
+          StaggeredFadeSlide(
+            delayMs: 600,
+            slideOffset: 15.0,
+            child: _buildSettingsTile(
+              icon: Icons.help_outline_rounded,
+              title: "Help & Support",
+              subtitle: "FAQs, Chat support & Contact info",
+            ),
           ),
-          _buildSettingsTile(
-            icon: Icons.info_outline_rounded,
-            title: "About",
-            subtitle: "Terms of service, app version & policies",
+          StaggeredFadeSlide(
+            delayMs: 700,
+            slideOffset: 15.0,
+            child: _buildSettingsTile(
+              icon: Icons.info_outline_rounded,
+              title: "About",
+              subtitle: "Terms of service, app version & policies",
+            ),
           ),
           const SizedBox(height: 24),
         ],

@@ -1,5 +1,7 @@
 import 'package:banking_ui/utils/constants/assets.dart';
 import 'package:banking_ui/utils/constants/color_styles.dart';
+import 'package:banking_ui/models/card_model.dart';
+import 'package:banking_ui/widgets/viewmodel_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -17,6 +19,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
   final _nameController = TextEditingController();
   final _expiryController = TextEditingController();
   final _cvvController = TextEditingController();
+  final _balanceController = TextEditingController(text: '50000');
 
   String _cardNumber = "•••• •••• •••• ••••";
   String _cardholderName = "YOUR NAME";
@@ -78,6 +81,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
     _nameController.dispose();
     _expiryController.dispose();
     _cvvController.dispose();
+    _balanceController.dispose();
     super.dispose();
   }
 
@@ -314,6 +318,22 @@ class _AddCardScreenState extends State<AddCardScreen> {
                 ),
               ],
             ),
+            const SizedBox(height: 16),
+            _buildInputField(
+              controller: _balanceController,
+              label: "Starting Balance",
+              icon: Icons.account_balance_wallet_outlined,
+              placeholder: "e.g. 50000",
+              keyboardType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+              ],
+              validator: (val) {
+                if (val == null || val.isEmpty) return "Starting balance is required";
+                if (double.tryParse(val) == null) return "Enter a valid amount";
+                return null;
+              },
+            ),
             const SizedBox(height: 36),
 
             // Save card button
@@ -340,6 +360,51 @@ class _AddCardScreenState extends State<AddCardScreen> {
                 ),
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
+                    final viewModel = ViewModelProvider.of(context);
+                    
+                    final cardPresets = [
+                      {
+                        'left': 0xFF0F172A, // Slate 900
+                        'right': 0xFF38BDF8, // Sky 400
+                        'asset': Assets.cardsVisaWhite,
+                      },
+                      {
+                        'left': 0xFF065F46, // Emerald 800
+                        'right': 0xFF34D399, // Emerald 400
+                        'asset': Assets.cardsVisaYellow,
+                      },
+                      {
+                        'left': 0xFF1E3A8A, // Blue 900
+                        'right': 0xFF60A5FA, // Blue 400
+                        'asset': Assets.cardsVisaWhite,
+                      },
+                      {
+                        'left': 0xFF581C87, // Purple 900
+                        'right': 0xFFC084FC, // Purple 400
+                        'asset': Assets.cardsMastercard,
+                      },
+                      {
+                        'left': 0xFF7C2D12, // Rust 800
+                        'right': 0xFFFDBA74, // Peach 300
+                        'asset': Assets.cardsMastercard,
+                      },
+                    ];
+                    
+                    final randomIndex = DateTime.now().millisecondsSinceEpoch % cardPresets.length;
+                    final preset = cardPresets[randomIndex];
+
+                    final newCard = CardModel(
+                      id: 'card_${DateTime.now().millisecondsSinceEpoch}',
+                      balance: double.tryParse(_balanceController.text) ?? 50000.0,
+                      cardNumber: _numberController.text,
+                      expiryDate: _expiryController.text,
+                      cardAsset: preset['asset'] as String,
+                      leftBgColorVal: preset['left'] as int,
+                      rightBgColorVal: preset['right'] as int,
+                    );
+
+                    viewModel.addCard(newCard);
+
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text("Card saved successfully!"),

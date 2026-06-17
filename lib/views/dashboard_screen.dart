@@ -1,10 +1,10 @@
 import 'package:banking_ui/utils/constants/color_styles.dart';
 import 'package:banking_ui/utils/constants/json/shortcut_list.dart';
-import 'package:banking_ui/utils/constants/json/transactions.dart';
 import 'package:banking_ui/widgets/bank_card.dart';
 import 'package:banking_ui/widgets/shortcut_button.dart';
 import 'package:banking_ui/widgets/transaction_tile.dart';
-import 'package:banking_ui/utils/constants/assets.dart';
+import 'package:banking_ui/widgets/viewmodel_provider.dart';
+import 'package:banking_ui/widgets/staggered_fade_slide.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,8 +18,26 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
+  String formatCurrency(double amount) {
+    List<String> parts = amount.toStringAsFixed(2).split('.');
+    String numStr = parts[0];
+    String decimal = parts[1];
+    if (numStr.length <= 3) {
+      return '₹ $numStr.$decimal';
+    }
+    String lastThree = numStr.substring(numStr.length - 3);
+    String otherNumbers = numStr.substring(0, numStr.length - 3);
+    RegExp reg = RegExp(r'(\d+?)(?=(\d{2})+(?!\d))');
+    String formattedOthers = otherNumbers.replaceAllMapped(reg, (Match m) => '${m[1]},');
+    return '₹ $formattedOthers,$lastThree.$decimal';
+  }
+
   @override
   Widget build(BuildContext context) {
+    final viewModel = ViewModelProvider.of(context);
+    final primaryCard = viewModel.cards.isNotEmpty ? viewModel.cards.first : null;
+    final recentTransactions = viewModel.transactions.take(5).toList();
+
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
       body: CustomScrollView(
@@ -72,42 +90,63 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 95, 16, 12),
+                  padding: const EdgeInsets.fromLTRB(16, 75, 16, 4),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       // User greeting
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Welcome back,',
-                            style: GoogleFonts.outfit(
-                              fontSize: 14,
-                              color: Colors.white.withValues(alpha: 0.6),
-                              fontWeight: FontWeight.w400,
+                      StaggeredFadeSlide(
+                        delayMs: 100,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Welcome back,',
+                              style: GoogleFonts.outfit(
+                                fontSize: 14,
+                                color: Colors.white.withValues(alpha: 0.6),
+                                fontWeight: FontWeight.w400,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            'Abhijith S P',
-                            style: GoogleFonts.outfit(
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                              color: Styles.whiteColor,
+                            const SizedBox(height: 2),
+                            Text(
+                              'Abhijith S P',
+                              style: GoogleFonts.outfit(
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                                color: Styles.whiteColor,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       // Card preview
-                      BankCard(
-                        balance: '₹ 2,50,000.00',
-                        cardNumber: '3829 4820 4629 5025',
-                        expiryDate: '05/22',
-                        cardAsset: Assets.cardsVisaYellow,
-                        leftBgColor: Styles.accentColor,
-                        rightBgColor: Styles.yellowColor,
+                      StaggeredFadeSlide(
+                        delayMs: 250,
+                        child: primaryCard != null
+                            ? BankCard(
+                                balance: formatCurrency(primaryCard.balance),
+                                cardNumber: primaryCard.cardNumber,
+                                expiryDate: primaryCard.expiryDate,
+                                cardAsset: primaryCard.cardAsset,
+                                leftBgColor: Color(primaryCard.leftBgColorVal),
+                                rightBgColor: Color(primaryCard.rightBgColorVal),
+                                margin: EdgeInsets.zero,
+                              )
+                            : Container(
+                                height: 170,
+                                margin: EdgeInsets.zero,
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withValues(alpha: 0.1),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "No cards active",
+                                  style: GoogleFonts.outfit(color: Colors.white),
+                                ),
+                              ),
                       ),
                     ],
                   ),
@@ -122,36 +161,39 @@ class _DashboardScreenState extends State<DashboardScreen> {
             delegate: PersistentHeader(
               widget: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Container(
-                  height: 90,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: Styles.whiteColor,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.05),
-                        blurRadius: 15,
-                        offset: const Offset(0, 5),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: shortcutList.map<Widget>((item) {
-                      return ShortcutButton(
-                        icon: item['icon'],
-                        label: item['label'],
-                        color: item['color'],
-                        onTap: () {
-                          if (item['route'] != null) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (c) => item['route']),
-                            );
-                          }
-                        },
-                      );
-                    }).toList(),
+                child: StaggeredFadeSlide(
+                  delayMs: 350,
+                  child: Container(
+                    height: 90,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Styles.whiteColor,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.05),
+                          blurRadius: 15,
+                          offset: const Offset(0, 5),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: shortcutList.map<Widget>((item) {
+                        return ShortcutButton(
+                          icon: item['icon'],
+                          label: item['label'],
+                          color: item['color'],
+                          onTap: () {
+                            if (item['route'] != null) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (c) => item['route']),
+                              );
+                            }
+                          },
+                        );
+                      }).toList(),
+                    ),
                   ),
                 ),
               ),
@@ -162,43 +204,46 @@ class _DashboardScreenState extends State<DashboardScreen> {
           SliverPadding(
             padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
             sliver: SliverToBoxAdapter(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Recent Transactions',
-                    style: GoogleFonts.outfit(
-                      color: Styles.primaryColor,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {},
-                    borderRadius: BorderRadius.circular(8),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                      child: Row(
-                        children: [
-                          Text(
-                            'Today',
-                            style: GoogleFonts.outfit(
-                              color: Styles.greenColor,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          const SizedBox(width: 4),
-                          Icon(
-                            CupertinoIcons.chevron_down,
-                            color: Styles.greenColor,
-                            size: 14,
-                          ),
-                        ],
+              child: StaggeredFadeSlide(
+                delayMs: 450,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Recent Transactions',
+                      style: GoogleFonts.outfit(
+                        color: Styles.primaryColor,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                  ),
-                ],
+                    InkWell(
+                      onTap: () {},
+                      borderRadius: BorderRadius.circular(8),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                        child: Row(
+                          children: [
+                            Text(
+                              'Today',
+                              style: GoogleFonts.outfit(
+                                color: Styles.greenColor,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            Icon(
+                              CupertinoIcons.chevron_down,
+                              color: Styles.greenColor,
+                              size: 14,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -209,16 +254,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
             sliver: SliverList(
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
-                  final trs = transactions[index];
-                  return TransactionTile(
-                    name: trs['name'],
-                    date: trs['date'],
-                    amount: trs['amount'],
-                    avatar: trs['avatar'],
-                    icon: trs['icon'],
+                  final trs = recentTransactions[index];
+                  return StaggeredFadeSlide(
+                    delayMs: 500 + (index * 80),
+                    slideOffset: 15.0,
+                    child: TransactionTile(
+                      name: trs.name,
+                      date: trs.date,
+                      amount: trs.amount,
+                      avatar: trs.avatar,
+                      icon: trs.icon,
+                    ),
                   );
                 },
-                childCount: transactions.length,
+                childCount: recentTransactions.length,
               ),
             ),
           ),
